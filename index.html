@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="city" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search_button" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="show_city">City Name</h1>
+            <h3><span id="show_temperature">38.06</span>&deg;C</h3>
+            <h1 id="weather_status" class="lead">Clouds</h1>
+        </div>
+    </div>
+    <script>
+        // url  https://api.openweathermap.org/data/2.5/weather?q=&units=metric&appid=b6cc4392568a3586e950307c86a22bbd
+        const apiKey = '4c7a0a74b314a60120eca4193e01efe6';
+        const apiBase = 'https://api.openweathermap.org/data/2.5/weather';
+
+        const getWeatherData = city => {
+            const url = `${apiBase}?q=${city}&units=metric&appid=${apiKey}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => updateUI(data))
+        }
+
+        const searchBtn = document.getElementById('search_button');
+        searchBtn.addEventListener('click', () => {
+            const inputCity = document.getElementById('city').value;
+            getWeatherData(inputCity)
+        })
+
+        const updateUI = data => {
+            document.getElementById('show_city').innerText = data.name || "Unknown Location!";
+            document.getElementById('show_temperature').innerText = data.main.temp;
+            document.getElementById('weather_status').innerText = data.weather[0].main;
+            document.getElementById('icon').setAttribute('src', `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
+            document.getElementById('city').value = "";
+        }
+
+        getWeatherData('Dhaka');
+        
+        // // api key : 4c7a0a74b314a60120eca4193e01efe6
+        // document.getElementById('btn').addEventListener('click', function() {
+        //     weather();
+        //     document.getElementById('searchCity').value = '';
+        // });
+
+        // function weather() {
+        //     const city = document.getElementById('searchCity').value;
+        //     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=4c7a0a74b314a60120eca4193e01efe6`)
+        //         .then((res) => res.json())
+        //         .then((data) => {
+        //             document.getElementById('temparature').innerText = data.main.temp;
+        //             document.getElementById('loction-name').innerText = data.name;
+        //         });
+        // }
+        // // Fetch City From IP
+        // async function getCity(){
+        //     const city = await fetch('http://ip-api.com/json/?fields=61439');
+        //     const data = await city.json();
+        //     return data.city;
+        // }
+
+        // getCity().then(data => {
+        //     document.getElementById('loction-name').textContent = data;
+        // });
+
+
+    </script>
+
+</body>
+
+</html>
